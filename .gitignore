@@ -1,1 +1,9 @@
 *.mp4
+*.ipynb_checkpoints
+*.aux
+*.fdb_latexmk
+*.fls
+*.log
+*.out
+*.bbl
+*.blg

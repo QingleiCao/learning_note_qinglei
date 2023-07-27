@@ -1,0 +1,126 @@
+\documentclass[journal,12pt,onecolumn,draftclsnofoot]{IEEEtran}
+\IEEEoverridecommandlockouts
+% The preceding line is only needed to identify funding in the first footnote. If that is unneeded, please comment it out.
+\def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
+    T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
+
+
+%\usepackage{movie15} % gif
+\usepackage{comment}
+\usepackage{cite}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{graphicx}
+\usepackage{textcomp}
+\usepackage{xcolor}
+\usepackage{todonotes}
+\usepackage{subcaption}
+\captionsetup{compatibility=false}
+\usepackage{caption}
+%\usepackage{algorithm}
+\usepackage[noend]{algorithmic}
+\usepackage{url}
+%\usepackage{titlesec}
+\usepackage{authblk}
+\usepackage{blindtext}
+\usepackage[switch]{lineno}
+
+\usepackage{booktabs}
+
+\usepackage{multirow}
+\usepackage{makecell}
+
+\usepackage[switch]{lineno}
+
+\usepackage{color, colortbl}
+
+%\usepackage{algorithmicx}
+%\usepackage{algpseudocode}
+\usepackage[linesnumbered, ruled]{algorithm2e}
+\SetKwRepeat{Do}{do}{while}%
+
+\renewcommand{\linenumberfont}{\normalfont\tiny\color{red}}
+
+\input{commands.tex}
+
+\looseness=1
+\widowpenalty=500
+
+\begin{document}
+%\linenumbers
+
+% Title
+\title{General Matrix Multiply on CS-2}
+
+\author[1,2]{Qinglei Cao}
+
+\affil[1]{Cerebras Systems, US}
+\affil[2]{\textit {\{qinglei.cao\}@cerebras.net}}
+
+\maketitle
+
+%\begin{abstract}
+%\input{abstract.tex}
+%\end{abstract}
+
+%\begin{IEEEkeywords}
+%\end{IEEEkeywords}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{The Cerebras CS-2}
+\label{sec:intro}
+\input{intro.tex}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{General Matrix Multiply}
+\label{sec:gemm}
+\input{gemm.tex}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{\master}
+\label{sec:master}
+\input{master.tex}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{\summa}
+\label{sec:summa}
+\input{summa.tex}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Experiments}
+\label{sec:perf}
+\input{perf.tex}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{MatMul in Machine Learning}
+\label{sec:ml}
+%\input{ml.tex}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Possible Optimizations towards \summa}
+\label{sec:opt}
+\input{opt.tex}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Summary}
+%\textbf{Acknowledgments.}
+%\input{ack.tex}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% The next two lines define the bibliography style to be used, and the bibliography file.
+
+% trigger a \newpage just before the given reference
+% number - used to balance the columns on the last page
+% adjust value as needed - may need to be readjusted if
+% the document is modified later
+\IEEEtriggeratref{18}
+
+\bibliographystyle{IEEEtran}
+\bibliography{ref}
+
+\begin{comment}
+% If your work has an appendix, this is the place to put it.
+\appendix
+\newpage
+\section{XXXXXX}
+\label{sec:appendix_tilesize}
+
+\end{comment}
+
+
+
+%\clearpage
+%\listoftodos[Notes]
+
+\end{document}

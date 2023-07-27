@@ -1,0 +1,111 @@
+%!TEX root = matmul_wse.tex
+
+\subsection{Implementation}
+
+
+Figure~\ref{fig:gemm_master_1} depicts how the data is distributed across PEs in \master, where $A$ and $C$ are distributed on $3 \times 3$ PEs ($PE_x = PE_y = 3$), $PE_x \times KB = K$, $PE_x \times NB = N$, and $PE_y \times MB = M$.
+%
+The way what \master does is to calculate the final result in $C$ one column by one column.
+%
+Take the calculation of the first column in $C$ for instance, as shown in Figure~\ref{fig:gemm_master_2}.
+%
+One column in $B$ is streamed in so that each PE receives a vector of size $KB$.
+%
+Then, $MB \times KB$ number of FMAC instructions (floating multiply-add) are operated locally, which output results to temporary buffers, holding the partial of the final results.
+%
+Therefore, a row reduction is required to generate the final result of the first column in $C$, as shown in Figure~\ref{fig:gemm_master_3} which reduces $t0*$, $t*$ and $t2*$ to the corresponding target $C$ column sequentially.
+
+
+\begin{figure}[t!]
+  \centering
+  \begin{subfigure}{0.70\columnwidth}
+    \includegraphics[width=\linewidth]{figures/gemm_A_C_memory_master/3.pdf}
+  \end{subfigure}
+  \caption{Row reduction, reducing from the temporary buffer to the target column in $C$}
+  \label{fig:gemm_master_3}
+\end{figure}
+
+\subsection{Performance Analysis}
+
+\begin{figure}[t!]
+  \centering
+  \begin{subfigure}{0.48\columnwidth}
+    \includegraphics[width=\linewidth]{figures/gemm_A_C_memory_master/4.pdf}
+    \caption{Mathematical}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}{0.48\columnwidth}
+    \includegraphics[width=\linewidth]{figures/gemm_A_C_memory_master/41.pdf}
+    \caption{Optimal}
+  \end{subfigure}
+  \caption{Execution of \master}
+  \label{fig:gemm_master_4}
+\end{figure}
+
+
+\begin{figure}[t!]
+  \centering
+  \begin{subfigure}{0.40\columnwidth}
+    \includegraphics[width=\linewidth]{figures/gemm_A_C_memory_master/5.pdf}
+    \caption{Flat ring.}
+    %\label{fig:gemm_master_1}
+  \end{subfigure}
+  \hfill
+  %
+  \begin{subfigure}{0.40\columnwidth}
+    \includegraphics[width=\linewidth]{figures/gemm_A_C_memory_master/6.pdf}
+    \caption{Jump ring.}
+    %\label{fig:gemm_master_2}
+  \end{subfigure}
+  \caption{Communication pattern.}
+  \label{fig:gemm_master_5_6}
+\end{figure}
+
+
+The execution model of \master can be described in Figure~\ref{fig:gemm_master_4}.
+%
+From mathematical perspective, $MB \times KB$ number of FMAC instructions are followed by a row reduction along horizontal split across vertical split.
+%
+However, in practice, many optimizations have been proposed to approach its optimal which overlaps FMACs and row reductions, including asynchronous execution (\async) and double buffering.
+%
+From the section above, it can be seen that each iteration, i.e., calculation of each column in $C$, is independent, as well as each row of PEs.
+%
+Therefore, if only considering one iteration of the one PE which operates $FMAC$, the number of FMAC is $nb\_fmac = MB \times KB$, followed by $nb\_fsum = MB \times PE_x$ number of reduction (FSUM, floating sum).
+%
+Take \async for instance, whose purpose is to hide the overhead of row reduction by FMAC.
+%
+This \async has two aspects: (1) executing FMACs and FSUMs asynchronously (2) executing FSUMs of different PEs asynchronously.
+%
+Therefore, if the communication pattern in row reduction is jump ring (see Figure~\ref{fig:gemm_master_5_6}) and the data is operated in half-precision, i.e., FP16 (SIMD = 4),
+\begin{itemize}
+  \item the number of cycles of FMAC: $cycle\_fmac = nb\_fmac/4$
+  \item the number of cycles of FSUM: $cycle\_fsum = 1 + 3 \times PE_x + MB/4$ (2 cycles to send data to its dependent and 1 cycle of FSUM, pipelined)
+\end{itemize}
+%
+Hence, if discarding the potential overlap of FSUM between iterations, the efficiency it can achieve in theory is $\frac{cycle\_fma}{max(cycle\_fmac, cycle\_fsum) + MB/4}$, i.e., 
+\begin{equation}
+  efficiency = \frac{MB \times KB}{max(MB \times KB, 4 + 12 \times PE_x) + MB}
+  \label{eq:master}
+\end{equation}
+%
+(Data movement can be dealt by microthread asynchronously, while FMAC and FSUM are operated by main thread.)
+
+If FSUMs between iterations are perfectly overlapped, then theoretical efficiency is:
+\begin{equation}
+  efficiency = \frac{MB \times KB \times N}{(MB \times KB + MB) \times N + 12 \times PE_x}
+  \label{eq:master_2}
+\end{equation}
+%
+%In other words,
+%\begin{itemize}
+%%  \item if $MB \times (KB-1) \geq 12 \times PE_x$, it is: $KB/(KB+1)$;
+%  \item if $MB \times (KB-1) < 12 \times PE_x$, it is: $MB \times KB/(MB \times KB+MB+12 \times PE_x) < 50\%$
+%\end{itemize}
+%
+%Therefore, the condition above is critical 
+%
+
+
+
+
+%\includegraphics{summa_gemm.gif}
