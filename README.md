@@ -1,4 +1,13 @@
-# learning_note_qinglei
+# Schedule
+
+Monday:    E3SM
+Tuesday:   Course + HiCMA
+Wednesday: PaRSEC
+Thursday:  Course + Proposal
+Friday:    AI
+Weekends:  Proposal
+
+# Learning Materials
 
 ## Teach Yourself Computer Science
 https://teachyourselfcs.com/
