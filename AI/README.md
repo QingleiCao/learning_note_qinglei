@@ -6,7 +6,7 @@ generative-ai-for-beginners: https://github.com/microsoft/generative-ai-for-begi
 
 self-llm: https://github.com/datawhalechina/self-llm
 
-SWE-agent: https://github.com/datawhalechina/self-llm
+SWE-agent: https://github.com/princeton-nlp/SWE-agent 
 
 GitHubDaily: https://github.com/QingleiCao/GitHubDaily
 
