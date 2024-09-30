@@ -1,11 +1,16 @@
 # Schedule
 
 Monday:    E3SM
+
 Tuesday:   Course + HiCMA
-Wednesday: PaRSEC
+
+Wednesday: GPU + PaRSEC
+
 Thursday:  Course + Proposal
+
 Friday:    AI
-Weekends:  Proposal
+
+Weekends:  Proposal + others
 
 # Learning Materials
 
