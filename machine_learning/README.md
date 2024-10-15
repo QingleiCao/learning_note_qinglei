@@ -10,3 +10,7 @@ https://www.youtube.com/watch?v=8-wzjpZA2sc
 # Deep Learning Specialization 
 
 https://www.coursera.org/specializations/deep-learning
+
+# Generative AI with Large Language Models
+
+https://www.coursera.org/learn/generative-ai-with-llms
