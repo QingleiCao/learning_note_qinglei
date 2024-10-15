@@ -14,3 +14,8 @@ https://www.coursera.org/specializations/deep-learning
 # Generative AI with Large Language Models
 
 https://www.coursera.org/learn/generative-ai-with-llms
+
+
+# TinyML and Efficient Deep Learning Computing
+
+https://hanlab.mit.edu/courses/2024-fall-65940
